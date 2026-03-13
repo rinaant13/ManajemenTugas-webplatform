@@ -1,4 +1,4 @@
-# TaskFlow – Full-Stack Task Management App
+# Litera – Full-Stack Task Management App
 
 > Ujian Tengah Semester – Pengembangan Aplikasi Berbasis Platform (KP70064006)
 > **Deadline:** 13 Maret 2026 @ 23.59
@@ -7,7 +7,7 @@
 
 ## Deskripsi Aplikasi
 
-**TaskFlow** adalah aplikasi manajemen tugas full-stack berbasis web dengan fitur:
+**Litera** adalah aplikasi manajemen tugas full-stack berbasis web dengan fitur:
 - 🔐 JWT Authentication (Register, Login, Refresh, Logout)
 - ✅ CRUD Tugas dengan filter, search, dan prioritas
 - 📁 CRUD Proyek dengan tracking progress
@@ -53,7 +53,7 @@ Buka file `frontend/index.html` di browser. Bisa dengan:
 ## Struktur Proyek
 
 ```
-taskflow/
+Litera/
 ├── backend/
 │   ├── src/
 │   │   ├── index.js               # Entry point Express server
