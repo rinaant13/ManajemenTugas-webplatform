@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Litera – Masuk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fraunces:ital,wght@0,700;0,800;1,700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --c1: #0F2A1D; --c2: #375534; --c3: #6B9071;
+  --c4: #AEC3B0; --c5: #E3EED4; --white: #ffffff;
+}
+html, body { height: 100%; font-family: 'Plus Jakarta Sans', sans-serif; overflow: hidden; }
+.auth-wrapper { display: flex; height: 100vh; }
+
+/* FORM PANEL LEFT */
+.form-panel {
+  width: 480px; min-width: 480px;
+  background: var(--white);
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 3rem 3.5rem;
+  overflow-y: auto;
+}
+.brand-mark { display: flex; align-items: center; gap: 0.625rem; margin-bottom: 2.5rem; }
+.brand-icon-box {
+  width: 40px; height: 40px; background: var(--c1);
+  border-radius: 10px; display: flex; align-items: center; justify-content: center;
+}
+.brand-name { font-family: 'Fraunces', serif; font-size: 1.4rem; font-weight: 800; color: var(--c1); }
+
+.tab-row {
+  display: flex; gap: 0; background: var(--c5);
+  border-radius: 10px; padding: 3px; margin-bottom: 1.75rem;
+}
+.tab-btn {
+  flex: 1; padding: 0.55rem; border: none; border-radius: 8px;
+  background: transparent; font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.875rem; font-weight: 600; color: var(--c3); cursor: pointer; transition: all 0.2s;
+}
+.tab-btn.active { background: var(--c1); color: var(--c5); box-shadow: 0 2px 8px rgba(15,42,29,0.25); }
+
+.form-section { display: none; }
+.form-section.active { display: block; animation: fadeUp 0.3s ease; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+.form-headline { font-family: 'Fraunces', serif; font-size: 1.9rem; font-weight: 700; color: var(--c1); margin-bottom: 0.35rem; }
+.form-subline { font-size: 0.875rem; color: var(--c3); margin-bottom: 1.75rem; }
+
+.form-group { margin-bottom: 1rem; }
+.field-label {
+  display: flex; align-items: center; gap: 0.35rem;
+  font-size: 0.78rem; font-weight: 700; color: var(--c2);
+  margin-bottom: 0.45rem; text-transform: uppercase; letter-spacing: 0.06em;
+}
+.input-wrap { position: relative; display: flex; align-items: center; }
+.input-icon { position: absolute; left: 0.875rem; display: flex; align-items: center; color: var(--c4); pointer-events: none; transition: color 0.2s; }
+.field-input {
+  width: 100%; background: var(--c5); border: 1.5px solid transparent;
+  border-radius: 10px; padding: 0.75rem 0.875rem 0.75rem 2.75rem;
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.9rem; color: var(--c1); outline: none; transition: all 0.2s;
+}
+.field-input::placeholder { color: var(--c4); }
+.field-input:focus { background: var(--white); border-color: var(--c3); box-shadow: 0 0 0 3px rgba(107,144,113,0.12); }
+.input-wrap:focus-within .input-icon { color: var(--c2); }
+
+.btn-submit {
+  width: 100%; background: var(--c1); color: var(--c5); border: none; border-radius: 10px;
+  padding: 0.85rem; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.95rem; font-weight: 700;
+  cursor: pointer; transition: all 0.25s; display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.btn-submit:hover { background: var(--c2); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(15,42,29,0.3); }
+.btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.alert-box { display: none; padding: 0.75rem 1rem; border-radius: 10px; font-size: 0.82rem; margin-bottom: 1rem; align-items: flex-start; gap: 0.5rem; }
+.alert-box.show { display: flex; }
+.alert-error { background: rgba(200,50,50,0.07); border: 1px solid rgba(200,50,50,0.2); color: #b83232; }
+.alert-success { background: rgba(55,85,52,0.1); border: 1px solid rgba(55,85,52,0.25); color: var(--c2); }
+
+.spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(227,238,212,0.3); border-top-color: var(--c5); border-radius: 50%; animation: spin 0.6s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* INFO PANEL RIGHT */
+.info-panel {
+  flex: 1; background: var(--c1);
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; justify-content: center; padding: 3.5rem;
+}
+.deco-circle { position: absolute; border-radius: 50%; border: 1px solid rgba(174,195,176,0.1); }
+.dc1 { width: 520px; height: 520px; top: -160px; right: -140px; }
+.dc2 { width: 360px; height: 360px; bottom: -80px; right: 60px; border-color: rgba(107,144,113,0.13); }
+.dc3 { width: 200px; height: 200px; top: 35%; left: -60px; border-color: rgba(55,85,52,0.35); }
+
+.dot-pattern { position: absolute; bottom: 3rem; left: 3.5rem; display: grid; grid-template-columns: repeat(10,1fr); gap: 10px; opacity: 0.2; }
+.dot-pattern span { display: block; width: 3px; height: 3px; background: var(--c4); border-radius: 50%; }
+
+.info-chip {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  background: rgba(107,144,113,0.18); border: 1px solid rgba(107,144,113,0.28);
+  border-radius: 20px; padding: 0.35rem 0.875rem;
+  font-size: 0.72rem; font-weight: 700; color: var(--c4);
+  letter-spacing: 0.07em; text-transform: uppercase;
+  margin-bottom: 1.5rem; width: fit-content;
+}
+.info-headline {
+  font-family: 'Fraunces', serif; font-size: 2.7rem; font-weight: 700; color: var(--c5);
+  line-height: 1.18; margin-bottom: 1rem; max-width: 400px;
+}
+.info-headline em { color: var(--c4); font-style: italic; }
+.info-desc { font-size: 0.88rem; color: var(--c4); line-height: 1.7; max-width: 370px; margin-bottom: 2.5rem; }
+
+.feature-list { display: flex; flex-direction: column; gap: 1rem; }
+.feature-item { display: flex; align-items: flex-start; gap: 1rem; animation: fIn 0.5s ease both; }
+.feature-item:nth-child(1){animation-delay:0.1s} .feature-item:nth-child(2){animation-delay:0.2s}
+.feature-item:nth-child(3){animation-delay:0.3s} .feature-item:nth-child(4){animation-delay:0.4s}
+@keyframes fIn { from{opacity:0;transform:translateX(-12px)} to{opacity:1;transform:translateX(0)} }
+.ficon {
+  width: 38px; height: 38px; flex-shrink: 0;
+  background: rgba(107,144,113,0.15); border: 1px solid rgba(107,144,113,0.22);
+  border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--c4);
+}
+.ftitle { font-size: 0.875rem; font-weight: 700; color: var(--c5); margin-bottom: 2px; }
+.fsub { font-size: 0.775rem; color: var(--c3); line-height: 1.5; }
+
+.mock-float {
+  position: absolute; bottom: 3.5rem; right: 3rem;
+  background: rgba(55,85,52,0.55); backdrop-filter: blur(14px);
+  border: 1px solid rgba(107,144,113,0.22); border-radius: 16px;
+  padding: 1.1rem 1.25rem; width: 220px;
+  animation: floatY 4s ease-in-out infinite;
+}
+@keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+.mock-title { font-size: 0.73rem; font-weight: 700; color: var(--c4); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.mock-item { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; font-size: 0.72rem; color: var(--c4); }
+.mdot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.mbar { flex: 1; height: 3px; background: rgba(174,195,176,0.18); border-radius: 3px; overflow: hidden; }
+.mfill { height: 100%; border-radius: 3px; background: var(--c4); }
+
+@media (max-width: 860px) {
+  .info-panel { display: none; }
+  .form-panel { width: 100%; min-width: 0; }
+  html, body { overflow: auto; }
+}
+@media (max-width: 768px) {
+  .auth-wrapper { flex-direction: column; }
+  .info-panel { display: none; }
+  .form-panel {
+    width: 100%;
+    min-width: 0;
+    padding: 2rem 1.5rem;
+    height: 100vh;
+    justify-content: center;
+  }
+}
+</style>
+</head>
+<body>
+<div class="auth-wrapper">
+
+  <!-- LEFT: FORM -->
+  <div class="form-panel">
+    <div class="brand-mark">
+      <div class="brand-icon-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E3EED4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </div>
+      <span class="brand-name">Litera</span>
+    </div>
+
+    <div class="tab-row">
+      <button class="tab-btn active" onclick="switchTab('login')">Masuk</button>
+      <button class="tab-btn" onclick="switchTab('register')">Daftar</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="form-section active" id="loginSection">
+      <div class="form-headline">Selamat Datang</div>
+      <div class="form-subline">Masuk untuk melanjutkan mengelola tugas Anda</div>
+
+      <div class="alert-box alert-error" id="loginError">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span id="loginErrMsg"></span>
+      </div>
+      <div class="alert-box alert-success" id="loginOk">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span id="loginOkMsg"></span>
+      </div>
+
+      <div class="form-group">
+        <div class="field-label">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          Alamat Email
+        </div>
+        <div class="input-wrap">
+          <span class="input-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
+          <input class="field-input" type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="field-label">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Kata Sandi
+        </div>
+        <div class="input-wrap">
+          <span class="input-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+          <input class="field-input" type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password">
+        </div>
+      </div>
+
+      <button class="btn-submit" id="loginBtn" onclick="handleLogin()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        <span>Masuk</span>
+      </button>
+    </div>
+
+    <!-- REGISTER -->
+    <div class="form-section" id="registerSection">
+      <div class="form-headline">Daftar</div>
+      <div class="form-subline">Buat akun Litera Anda secara gratis</div>
+
+      <div class="alert-box alert-error" id="registerError">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span id="registerErrMsg"></span>
+      </div>
+      <div class="alert-box alert-success" id="registerOk">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span id="registerOkMsg"></span>
+      </div>
+
+      <div class="form-group">
+        <div class="field-label">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Nama Lengkap
+        </div>
+        <div class="input-wrap">
+          <span class="input-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+          <input class="field-input" type="text" id="registerName" placeholder="Nama Lengkap" autocomplete="name">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="field-label">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          Alamat Email
+        </div>
+        <div class="input-wrap">
+          <span class="input-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
+          <input class="field-input" type="email" id="registerEmail" placeholder="you@example.com" autocomplete="email">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="field-label">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Kata Sandi <span style="color:var(--c4);text-transform:none;font-weight:500;letter-spacing:0"> (min 6 chars)</span>
+        </div>
+        <div class="input-wrap">
+          <span class="input-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+          <input class="field-input" type="password" id="registerPassword" placeholder="Create a secure password" autocomplete="new-password">
+        </div>
+      </div>
+
+      <button class="btn-submit" id="registerBtn" onclick="handleRegister()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+        <span>Buat Akun Saya</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- RIGHT: INFO -->
+  <div class="info-panel">
+    <div class="deco-circle dc1"></div>
+    <div class="deco-circle dc2"></div>
+    <div class="deco-circle dc3"></div>
+
+    <div class="info-chip">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      Platform Manajemen Tugas
+    </div>
+
+    <div class="info-headline">Kelola Tugas<br><em>dan Proyek Kamu!</em></div>
+    <div class="info-desc">Lini Integrasi Tugas, Efisiensi Ruang Aksi</div>
+
+    <div class="feature-list">
+      <div class="feature-item">
+        <div class="ficon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+        <div><div class="ftitle">Manajemen Tugas</div><div class="fsub">Integrasi Tugas</div></div>
+      </div>
+      <div class="feature-item">
+        <div class="ficon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+        <div><div class="ftitle">Manajemen Proyek</div><div class="fsub">Kelola semua proyek Anda dalam satu tempat</div></div>
+      </div>
+      <div class="feature-item">
+        <div class="ficon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        <div><div class="ftitle">Kalender Terintegrasi</div><div class="fsub">Visualisasikan semua tenggat waktu dan acara dalam tampilan bulanan</div></div>
+      </div>
+      <div class="feature-item">
+        <div class="ficon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div><div class="ftitle">Antrian Prioritas Cerdas</div><div class="fsub">Tugas yang diurutkan berdasarkan urgensi</div></div>
+      </div>
+    </div>
+
+    <div class="mock-float">
+      <div class="mock-title">Tingkatkan </div>
+      <div class="mock-item"><div class="mdot" style="background:var(--c4)"></div><span style="flex:1">Manajemen Waktu</span><div class="mbar"><div class="mfill" style="width:80%"></div></div></div>
+      <div class="mock-item"><div class="mdot" style="background:var(--c3)"></div><span style="flex:1">Kerja Tim</span><div class="mbar"><div class="mfill" style="width:45%"></div></div></div>
+      <div class="mock-item"><div class="mdot" style="background:var(--c2)"></div><span style="flex:1">Efisiensi</span><div class="mbar"><div class="mfill" style="width:20%"></div></div></div>
+    </div>
+
+    <div class="dot-pattern">
+      <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/api.js"></script>
+<script>
+if (TokenService.getAccessToken() && TokenService.getUser()) window.location.href = 'app.html';
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', i === (tab==='login'?0:1)));
+  document.getElementById('loginSection').classList.toggle('active', tab==='login');
+  document.getElementById('registerSection').classList.toggle('active', tab==='register');
+  document.querySelectorAll('.alert-box').forEach(a => a.classList.remove('show'));
+}
+
+function showAlert(boxId, msgId, msg, type) {
+  document.querySelectorAll('.alert-box').forEach(a => a.classList.remove('show'));
+  const box = document.getElementById(boxId);
+  document.getElementById(msgId).textContent = msg;
+  box.className = `alert-box alert-${type} show`;
+  if (type !== 'success') setTimeout(() => box.classList.remove('show'), 5000);
+}
+
+function setBtnLoading(id, loading, html) {
+  const b = document.getElementById(id);
+  b.disabled = loading;
+  if (loading) b.innerHTML = `<div class="spinner"></div><span>Please wait…</span>`;
+  else b.innerHTML = html;
+}
+
+const LOGIN_HTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg><span>Sign In to Dashboard</span>`;
+const REG_HTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg><span>Create My Account</span>`;
+
+async function handleLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pw = document.getElementById('loginPassword').value;
+  if (!email || !pw) return showAlert('loginError','loginErrMsg','Please fill in all fields','error');
+  setBtnLoading('loginBtn', true);
+  const res = await AuthAPI.login({ email, password: pw });
+  setBtnLoading('loginBtn', false, LOGIN_HTML);
+  if (res?.ok) {
+    TokenService.setTokens(res.data.data.accessToken, res.data.data.refreshToken);
+    TokenService.setUser(res.data.data.user);
+    showAlert('loginOk','loginOkMsg','Login successful! Redirecting…','success');
+    setTimeout(() => window.location.href = 'app.html', 700);
+  } else {
+    showAlert('loginError','loginErrMsg', res?.data?.message || 'Login failed','error');
+  }
+}
+
+async function handleRegister() {
+  const name = document.getElementById('registerName').value.trim();
+  const email = document.getElementById('registerEmail').value.trim();
+  const pw = document.getElementById('registerPassword').value;
+  if (!name||!email||!pw) return showAlert('registerError','registerErrMsg','Please fill in all fields','error');
+  if (pw.length < 6) return showAlert('registerError','registerErrMsg','Password must be at least 6 characters','error');
+  setBtnLoading('registerBtn', true);
+  const res = await AuthAPI.register({ name, email, password: pw });
+  setBtnLoading('registerBtn', false, REG_HTML);
+  if (res?.ok) {
+    TokenService.setTokens(res.data.data.accessToken, res.data.data.refreshToken);
+    TokenService.setUser(res.data.data.user);
+    showAlert('registerOk','registerOkMsg','Account created! Redirecting…','success');
+    setTimeout(() => window.location.href = 'app.html', 700);
+  } else {
+    showAlert('registerError','registerErrMsg', res?.data?.message || 'Registration failed','error');
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  document.getElementById('loginSection').classList.contains('active') ? handleLogin() : handleRegister();
+});
+</script>
+</body>
+</html>
