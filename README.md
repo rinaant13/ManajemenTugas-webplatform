@@ -1,7 +1,6 @@
 # Litera – Full-Stack Task Management App
 
 > Ujian Tengah Semester – Pengembangan Aplikasi Berbasis Platform (KP70064006)
-> **Deadline:** 13 Maret 2026 @ 23.59
 
 ---
 
@@ -24,7 +23,7 @@
 |----------|-------------------------------|
 | Backend  | Node.js + Express             |
 | Auth     | JWT (access + refresh tokens) |
-| Database | In-Memory (array-based)       |
+| Database | MySQL                         |
 | Frontend | Vanilla HTML + CSS + JS       |
 
 ---
@@ -83,16 +82,6 @@ Litera/
 ---
 
 ## API Endpoints
-
-### Auth
-| Method | Endpoint             | Auth | Deskripsi |
-|--------|----------------------|------|-----------|
-| POST   | /api/auth/register   | ❌   | Daftar akun baru |
-| POST   | /api/auth/login      | ❌   | Login akun |
-| POST   | /api/auth/refresh    | ❌   | Refresh access token |
-| POST   | /api/auth/logout     | ❌   | Logout (invalidate refresh token) |
-| GET    | /api/auth/profile    | ✅   | Ambil profil user |
-| PUT    | /api/auth/profile    | ✅   | Update profil |
 
 ### Tasks (semua dilindungi JWT)
 | Method | Endpoint        | Deskripsi |
